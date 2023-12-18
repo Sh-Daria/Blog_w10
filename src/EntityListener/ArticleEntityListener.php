@@ -15,14 +15,11 @@ class ArticleEntityListener
 {
     public function __construct(private readonly Security $security)
     {
-
     }
 
-    public function prePersist(PrePersistEventArgs $event): void
+    public function prePersist(\App\Entity\Article $entity): void
     {
-        /**@var Article $entity */
-        $entity = $event->getObject();
-        $entity->setCreatedAt(new \DateTimeImmutable());
-        $entity->setAuthor($this->security->getUser());
+        $entity->setCreatedAt(new \DateTimeImmutable())
+            ->setAuthor($this->security->getUser());
     }
 }
