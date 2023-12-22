@@ -10,6 +10,7 @@
     {% for article in articles %}
         <article>
             <h2>{{ article.title }}</h2>
+            <a href="{{ path('app_article_edit', {'id': article.id}) }}">Редактировать</a>
             <div class="article-content">
                 {{article.body|raw|nl2br }}
             </div>
