@@ -15,6 +15,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(ArticleService $articleService): Response
     {
+        // Controller поднимает бизнес-сервис по приходу (получению) запроса, который в свою очередь выполняет логику и возвращает ответ
         return $this->render('home/index.html.twig', [
             'articles' => $articleService->getRecentArticles(self::RECENT_ARTICLE_COUNT_ON_HOME),
         ]);

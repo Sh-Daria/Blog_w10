@@ -14,6 +14,7 @@ class ArticleService
 
     public function getRecentArticles(int $count)
     {
+        // место для дополнительного функционала перед отправкой (матем. модель, кеш...)
         return $this->articleRepository->getRecentArticles($count);
     }
 }
