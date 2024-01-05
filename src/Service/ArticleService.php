@@ -15,7 +15,7 @@ class ArticleService implements ArticleServiceInterface
 
     }
 
-    public function getRecentArticles(int $count) : array
+    public function getRecentArticles(int $count)
     {
         $this->logger->info(sprintf('getting %d recent articles', $count));
         // место для дополнительного функционала перед отправкой (матем. модель, кеш...)

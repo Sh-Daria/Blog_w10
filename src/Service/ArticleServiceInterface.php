@@ -4,6 +4,5 @@ namespace App\Service;
 
 interface ArticleServiceInterface
 {
-    public function getRecentArticles(int $count) : array;
-    
+    public function getRecentArticles(int $count);
 }
