@@ -24,6 +24,8 @@
                 Дата создания: {{ article.createdAt|date('d.m.Y H:i:s') }}, Автор: {{ article.author}}
             </div>
         </article>
+    {% else %}
+        <div><br>По вашему запросу ничего не нашлось!🙁</div>
     {% endfor %}
 </div>
 {% endblock %}
