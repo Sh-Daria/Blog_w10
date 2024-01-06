@@ -21,7 +21,7 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-    public function getRecentArticles(int $count, ?string $search = null): \Doctrine\ORM\Query
+    public function getRecentArticles(int $count, ?string $search = null): \Doctrine\ORM\QueryBuilder
     {
         $query = $this->createQueryBuilder('article')
         ->orderBy('article.createdAt', 'DESC')
@@ -32,7 +32,7 @@ class ArticleRepository extends ServiceEntityRepository
                 ->setParameter('search', '%'.$search.'%');
         }
 
-        return $query->getQuery();
+        return $query;
     }
 
 }

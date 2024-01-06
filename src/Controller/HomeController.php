@@ -6,6 +6,8 @@ namespace App\Controller;
 use App\Dto\SearchDto;
 use App\Form\AppSearchType;
 use App\Service\ArticleServiceInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,9 +33,19 @@ class HomeController extends AbstractController
             $query = $articleService->getRecentArticles(self::RECENT_ARTICLE_COUNT_ON_HOME);
         }
 
+        $pagerfanta = new Pagerfanta(
+            new QueryAdapter($query)
+        );
+
+        $pagerfanta->setMaxPerPage(1);
+
+        if ($request->query->has('page')) {
+            $pagerfanta->setCurrentPage((int) $request->query->get('page', 1));
+        }
+
         // Controller поднимает бизнес-сервис по приходу (получению) запроса, который в свою очередь выполняет логику и возвращает ответ
         return $this->render('home/index.html.twig', [
-            'articles' => $query->getResult(),
+            'articles' => $pagerfanta,
             'form' => $form,
         ]);
     }
