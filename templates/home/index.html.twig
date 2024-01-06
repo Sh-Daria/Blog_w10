@@ -7,6 +7,12 @@
 
 <div class="example-wrapper">
     <a href="{{ path('admin.index')}}">Администрирование</a>
+    
+    {{ form_start(form, {attr: {"class": "d-inline"}}) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary">Найти</button>
+    {{ form_end(form) }}
+
     {% for article in articles %}
         <article>
             <h2>{{ article.title }}</h2>

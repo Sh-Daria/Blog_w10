@@ -30,7 +30,6 @@ class ArticleEntityListener
         $entity->setCreatedAt(new \DateTimeImmutable())
             ->setAuthor($this->security->getUser());
     
-
         $this->bus->dispatch(new ArticleNotification(
             $entity->getId(),
             $entity->getTitle(),
