@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use Psr\Log\LoggerInterface;
 
@@ -20,5 +21,10 @@ class ArticleService implements ArticleServiceInterface
         $this->logger->info(sprintf('getting %d recent articles', $count));
         // место для дополнительного функционала перед отправкой (матем. модель, кеш...)
         return $this->articleRepository->getRecentArticles($count, $search);
+    }
+
+    public function getSingleArticleByIds(int $id): ?Article
+    {
+        return $this->articleRepository->find($id);
     }
 }

@@ -26,13 +26,13 @@ class ArticleEntityListener
     {
     }
 
-    public function prePersist(\App\Entity\Article $entity): void
+    public function prePersist(Article $entity): void
     {
         $entity->setCreatedAt(new \DateTimeImmutable())
             ->setAuthor($this->security->getUser());
     }
 
-    public function PostPersist(\App\Entity\Article $entity): void
+    public function PostPersist(Article $entity): void
     {
         $this->bus->dispatch(new ArticleNotification(
             $entity->getId(),
@@ -45,7 +45,7 @@ class ArticleEntityListener
 
 //если обновляем, то будет:
 
-    public function preUpdate(\App\Entity\Article $entity, PreUpdateEventArgs $event): void
+    public function preUpdate(Article $entity, PreUpdateEventArgs $event): void
     {
         $this->bus->dispatch(new ArticleNotification(
             $entity->getId(),

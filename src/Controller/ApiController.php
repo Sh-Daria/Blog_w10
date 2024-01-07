@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Article;
+use App\Repository\UserRepository;
 use App\Service\ArticleServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api', name:'api.')]
@@ -44,5 +48,64 @@ class ApiController extends AbstractController
 
     }
 
+    // для чтения 1 статьи
+    #[Route('article/{article}', methods:['GET'])]
+    public function article(Article $article): JsonResponse
+    {
+        return new JsonResponse([
+            'id' => $article->getId(),
+            'title'=> $article->getTitle(),
+            'body' => $article->getBody(),
+            'created_at' => $article->getCreatedAt()->format('d.m.Y H:i:s'),
+            'author' => [
+                'id'=> $article->getAuthor()->getId(),
+                'name'=> $article->getAuthor()->__toString(),
+            ]
+        ]);
+    }
 
+    // для создания 
+    #[Route('article', methods:['POST'])]
+    public function createArticle(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): JsonResponse
+    {
+        $errors = [];
+        $errorTemplate = 'Поле %s не может быть пустым';
+
+        $payload = $request->getContent();
+
+        $data = @json_decode($payload, true);
+
+
+
+        if (!isset($data['title'])) {
+            $errors[]= sprintf($errorTemplate, 'title');
+        }
+
+        if (!isset($data['body'])) {
+            $errors[]= sprintf($errorTemplate, 'body');
+        }
+
+        if (!empty($errors)){
+            return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $article = new Article();
+
+        $article->setTitle($data['title'])
+            ->setBody($data['body']);
+
+        $entityManager->persist($article);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'id' => $article->getId(),
+            'title'=> $article->getTitle(),
+            'body' => $article->getBody(),
+            'created_at' => $article->getCreatedAt()->format('d.m.Y H:i:s'),
+            'author' => [
+                'id'=> $article->getAuthor()->getId(),
+                'name'=> $article->getAuthor()->__toString(),
+            ]
+        ], 201);
+    }
 }
