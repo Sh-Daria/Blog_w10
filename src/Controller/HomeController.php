@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    private const RECENT_ARTICLE_COUNT_ON_HOME = 5;
+    private const RECENT_ARTICLE_COUNT_ON_HOME = 10;
 
     #[Route('/', name: 'homepage')]
     public function index(ArticleServiceInterface $articleService, Request $request): Response
@@ -37,7 +37,7 @@ class HomeController extends AbstractController
             new QueryAdapter($query)
         );
 
-        $pagerfanta->setMaxPerPage(1);
+        $pagerfanta->setMaxPerPage(3);
 
         if ($request->query->has('page')) {
             $pagerfanta->setCurrentPage((int) $request->query->get('page', 1));

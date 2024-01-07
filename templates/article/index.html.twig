@@ -1,39 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Article index{% endblock %}
+{% block title %}Hello ArticleController!{% endblock %}
 
 {% block body %}
-    <h1>Список статей</h1>
+    <h1>{{ article.title }}</h1>
+    <h6><U>Дата создания: {{ article.createdAt|date('d.m.Y H:i:s') }}, Автор: {{ article.author}}</U></h6>
+    <div class="article-content">
+        {{ article.body|raw|nl2br }}
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Body</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.id }}</td>
-                <td>{{ article.title }}</td>
-                <td>{{ article.body }}</td>
-                <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
-                </td>
-            </tr>
+    <div>
+        <h4>Комментарии</h4>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}            
+        {# Форма комментария #}
+        {{ form_start(form, {attr: {"class": "d-inline"}}) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary">{{ button_label|default('Save'| trans) }}</button>
+        {{ form_end(form) }}
+
+        {# Список комментариев, отсортированный по дате создания desc #}
+        {% for article in article.comments|filter(v => v.isViewableByUsers) %}
+            <div class="comment">
+                {{ article.comment }}, <br><strong> Автор:</strong> {{ article.displayAuthor }}, <br><strong>Дата публикации:</strong> {{ article.createdAt|date('d.m.Y H:i:s') }}
+            </div>
         {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+            <div><br>Комментариев пока нет</div>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_article_new') }}">Create new</a>
+    </div>
 {% endblock %}
