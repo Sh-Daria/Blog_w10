@@ -20,7 +20,7 @@ class ArticleCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id', 'ID'),
+            IdField::new('id', 'ID')->hideOnForm(), //только на просмотр 
             TextField::new('title', 'Заголовок статьи'),
             TextEditorField::new('body', 'Текст статьи'),
             AssociationField::new('author', 'Автор')->hideOnForm(), //только на просмотр 
