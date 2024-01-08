@@ -9,7 +9,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Validator\Constraints\Date;
 
 class ArticleCrudController extends AbstractCrudController
 {
@@ -23,7 +22,7 @@ class ArticleCrudController extends AbstractCrudController
         return [
             IdField::new('id', 'ID'),
             TextField::new('title', 'Заголовок статьи'),
-            TextEditorField::new('body', 'Текст поста'),
+            TextEditorField::new('body', 'Текст статьи'),
             AssociationField::new('author', 'Автор')->hideOnForm(), //только на просмотр 
             DateTimeField::new('createdAt', 'Дата создания')->hideOnForm(), //только на просмотр 
         ];
